@@ -27,3 +27,4 @@ def test_bool2float():
         to_type=Float
     ).value == 1.
 
+test_bool2float()

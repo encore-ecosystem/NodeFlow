@@ -16,6 +16,11 @@ class Int2Float(Adapter):
     def get_type_of_target_variable() -> Type[Float]:
         return Float
 
+    @staticmethod
+    def is_loose_information() -> bool:
+        return False
+
+
 __all__ = [
     "Int2Float",
 ]
