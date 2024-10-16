@@ -16,6 +16,10 @@ class Bool2Int(Adapter):
     def get_type_of_target_variable() -> Type[Int]:
         return Int
 
+    @staticmethod
+    def is_loose_information() -> bool:
+        return False
+
 
 __all__ = [
     "Bool2Int",
