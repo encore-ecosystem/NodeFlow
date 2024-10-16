@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nodeflow"
-version = "0.0.1"
+version = "0.0.2"
 description = ""
 authors = ["Maksim Shushkevich <m.e.shushkevich@yandex.com>"]
 license = "MIT"
