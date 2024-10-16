@@ -1,0 +1,31 @@
+name: Upload Python Package
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4.2.0
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        pip install poetry
+        poetry install
+
+    - name: Publish Package
+      run: poetry publish -u __token__ -p "$PYPI_TOKEN" --build
+      env:
+        PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
