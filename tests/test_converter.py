@@ -28,21 +28,21 @@ class Int2Float(Adapter):
     def convert(self, variable: Int) -> Float:
         return Float(value=float(variable.value))
 
-    def is_loose_information(self) -> bool:
+    def is_loses_information(self) -> bool:
         return False
 
 class Float2Int(Adapter):
     def convert(self, variable: Float) -> Int:
         return Int(value=int(variable.value))
 
-    def is_loose_information(self) -> bool:
+    def is_loses_information(self) -> bool:
         return True
 
 class Bool2Int(Adapter):
     def convert(self, variable: Bool) -> Int:
         return Int(value=int(variable.value))
 
-    def is_loose_information(self) -> bool:
+    def is_loses_information(self) -> bool:
         return False
 
 
