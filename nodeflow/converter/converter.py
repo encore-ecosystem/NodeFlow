@@ -1,8 +1,9 @@
-from nodeflow.adapters import Adapter, Pipeline
+from nodeflow.adapters import Adapter
 from typing import Iterable, Type, Optional
-from nodeflow.node import Variable
 from collections import deque
 
+from nodeflow.adapters.pipeline import Pipeline
+from nodeflow.node.variable import Variable
 
 
 class Converter:
@@ -33,7 +34,7 @@ class Converter:
         return pipeline.convert(variable)
 
     def _get_converting_pipeline(self, source: Type[Variable], target: Type[Variable]) -> Optional[Pipeline]:
-        pipeline_with_loose_information : Optional[Pipeline] = None
+        pipeline_with_loses_information : Optional[Pipeline] = None
         # ---------
         # BFS
         # ---------
@@ -53,15 +54,15 @@ class Converter:
                     for i in range(len(road) - 1):
                         pipeline.add_adapter(self.graph[road[i]][road[i + 1]])
 
-                    if not pipeline_with_loose_information and pipeline.is_loose_information():
+                    if not pipeline_with_loses_information and pipeline.is_loses_information():
                         # the shortest pipeline with loosing an information
-                        pipeline_with_loose_information = pipeline
+                        pipeline_with_loses_information = pipeline
                     else:
                         # the shortest pipeline without loosing an information
                         return pipeline
                 queue.append([child, type_road + [child]])
 
-        return pipeline_with_loose_information
+        return pipeline_with_loses_information
 
 __all__ = [
     "Converter"
