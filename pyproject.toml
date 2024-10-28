@@ -1,9 +1,8 @@
 [tool.poetry]
 name = "nodeflow"
-version = "0.0.2"
+version = "0.1.0"
 description = ""
-authors = ["Maksim Shushkevich <m.e.shushkevich@yandex.com>"]
-license = "MIT"
+authors = ["Maksim Shushkevich <meshushkevich@edu.hse.ru>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
