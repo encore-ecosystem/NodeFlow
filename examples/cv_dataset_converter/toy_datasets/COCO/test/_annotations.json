@@ -1,0 +1,31 @@
+{
+    "images": [
+        {
+            "id": 0,
+            "file_name": "1a7d2ce6ffefdde514a22746515f19f8cf5ae0d7187b99a05fed4fb7c01f59f2.jpg",
+            "width": 640,
+            "height": 640
+        }
+    ],
+    "annotations": [
+        {
+            "id": 0,
+            "image_id": 0,
+            "category_id": 0,
+            "bbox": [
+                138,
+                266,
+                88,
+                36
+            ],
+            "area": 3168,
+            "iscrowd": 0
+        }
+    ],
+    "categories": [
+        {
+            "id": 0,
+            "name": "plate"
+        }
+    ]
+}
