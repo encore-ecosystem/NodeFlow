@@ -1,6 +1,7 @@
 from examples.cv_dataset_converter.utils.variables import PathVariable, YOLO_Dataset, COCO_Dataset
-from nodeflow import Node
 from nodeflow.node import Function
+from nodeflow import Node
+
 import shutil
 import yaml
 import json
