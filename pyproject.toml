@@ -1,7 +1,6 @@
 [tool.poetry]
 name = "nodeflow"
 version = "0.0.3"
-
 description = ""
 authors = ["Maksim Shushkevich <meshushkevich@edu.hse.ru>"]
 readme = "README.md"
