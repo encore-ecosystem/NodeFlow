@@ -1,6 +1,0 @@
-names:
-- plate
-nc: 1
-test: ../test/images
-train: ../train/images
-val: ../valid/images

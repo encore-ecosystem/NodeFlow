@@ -4,7 +4,6 @@ from examples.cv_dataset_converter.utils.variables import *
 
 from nodeflow import Converter
 import pathlib
-import pprint
 
 ADAPTER_LIST = [
     COCO2YOLO_Adapter(),
@@ -15,16 +14,20 @@ ADAPTER_LIST = [
 def main():
     converter = Converter(ADAPTER_LIST)
 
-    # coco_dataset = converter.convert(
-    #     variable=YOLO_Reader().compute(
-    #         path_to_dataset=PathVariable(
-    #             value=pathlib.Path().resolve() / 'toy_datasets' / 'YOLO'
-    #         )
-    #     ),
-    #     to_type=COCO_Dataset
-    # )
-    #
-    # print(f"coco {coco_dataset.anns}")
+    coco_dataset = converter.convert(
+        variable=YOLO_Reader().compute(
+            path_to_dataset=PathVariable(
+                value=pathlib.Path().resolve() / 'toy_datasets' / 'YOLO'
+            )
+        ),
+        to_type=COCO_Dataset
+    )
+    COCO_Writer().compute(
+        coco_dataset=coco_dataset,
+        target_path=PathVariable(
+            value=pathlib.Path().resolve() / 'toy_datasets' / 'COCO'
+        )
+    )
 
     yolo_dataset = converter.convert(
         variable=COCO_Reader().compute(

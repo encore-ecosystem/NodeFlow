@@ -62,6 +62,14 @@ class COCO_Reader(Function):
                 for category in data["annotations"]:
                     category['category_id'] = min(shrinkage_superclass_mapping[all_categories_mapping[category['category_id']]])
 
+                data['categories'] = [
+                    {
+                        'id'            : min(shrinkage_superclass_mapping[category]),
+                        'name'          : category,
+                        'supercategory' : 'none'
+                    }
+                    for category in shrinkage_superclass_mapping
+                ]
                 annotations[split] = data
 
             images_directory = path_to_dataset / split
@@ -99,26 +107,22 @@ class YOLO_Writer(Function):
             }
             yaml.dump(datayaml, yaml_file)
 
-        # yaml_file_path = output_base_directory / "dataset.yaml"
-        # yaml_file.write('train: ./train\n')
-        # yaml_file.write('val: ./valid\n')
-        # yaml_file.write('test: ./test\n')
-        # yaml_file.write(f'nc: {len(coco_data["categories"])}\n')
-        # yaml_file.write(f'names: {list(category_mapping.values())}\n')
-
-        # write .yaml file
-        # <deprecated>
-        # with open(root / "data.yaml", "w") as datayaml_file:
-        #     yaml.dump(self.datayaml, datayaml_file)
-
-        # write labels
-        # for split in ["train", "test", "valid"]:
-
 
 class COCO_Writer(Function):
-    def compute(self, *args, **kwargs) -> Node:
-        ...
+    def compute(self, coco_dataset: COCO_Dataset, target_path: PathVariable) -> Node:
+        root = target_path.value
 
+        for split in ["train", "test", "valid"]:
+            (root / split).mkdir(parents=True, exist_ok=True)
+
+            for image_path in coco_dataset.imgs[split].values():
+                shutil.copy(
+                    src = image_path,
+                    dst = root / split / image_path.name
+                )
+
+            with open(root / split / '_annotations.json', 'w') as json_file:
+                json.dump(coco_dataset.anns[split], json_file, indent=4)
 
 
 __all__ = [

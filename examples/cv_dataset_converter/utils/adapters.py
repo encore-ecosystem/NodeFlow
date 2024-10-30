@@ -1,3 +1,6 @@
+import numpy as np
+from PIL import Image
+
 from nodeflow.adapters import Adapter
 from examples.cv_dataset_converter.utils.variables import YOLO_Dataset, COCO_Dataset, PathVariable
 from tqdm import tqdm
@@ -23,20 +26,21 @@ class YOLO2COCO_Adapter(Adapter):
                 'categories': cat_id_to_name_mapping
             }
             image_id, annotation_id = 0, 0
-            for im_name, im_data in tqdm(variable.imgs[split].items()):
-                height, width, _ = im_data.shape
+            for im_name, im_path in tqdm(variable.imgs[split].items()):
+                image = np.array(Image.open(im_path))
+                height, width, _ = image.shape
                 image_info = {
-                    "id": image_id,
-                    "file_name": im_name,
-                    "width": width,
-                    "height": height,
+                    "id"        : image_id,
+                    "file_name" : im_name,
+                    "width"     : width,
+                    "height"    : height,
                 }
                 coco_anns[split]["images"].append(image_info)
 
-                for line in variable.anns[split][im_name]:
-                    mapped_line = list(map(float, line.split()))
+                for txt_label, line in variable.anns[split].items():
+                    mapped_line = list(map(float, line[0].split()))
                     if len(mapped_line) == 5:
-                        class_id, x_center, y_center, width, height = map(float, line.split())
+                        class_id, x_center, y_center, width, height = mapped_line
 
                         x_min = int((x_center - width / 2) * image_info["width"])
                         y_min = int((y_center - height / 2) * image_info["height"])
@@ -76,7 +80,7 @@ class YOLO2COCO_Adapter(Adapter):
         return COCO_Dataset(anns=coco_anns, imgs=variable.imgs, path=None)
 
     def is_loses_information(self) -> bool:
-        return False
+        return True
 
 
 class COCO2YOLO_Adapter(Adapter):
