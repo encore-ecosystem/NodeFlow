@@ -1,6 +1,6 @@
 from nodeflow.adapters.abstract import Adapter
-from nodeflow.node.abstract import Variable
 from typing import Type
+from nodeflow.node.variable import Variable
 
 
 class Pipeline(Adapter):
@@ -10,7 +10,7 @@ class Pipeline(Adapter):
 
     def add_adapter(self, adapter: Adapter):
         self._pipeline += [adapter]
-        self._loose_information = self._loose_information or adapter.is_loose_information()
+        self._loose_information = self._loose_information or adapter.is_loses_information()
         if len(self._pipeline) > 1:
             s1 = self._pipeline[-2].get_type_of_target_variable()
             s2 = self._pipeline[-1].get_type_of_source_variable()
@@ -30,7 +30,7 @@ class Pipeline(Adapter):
         assert len(self._pipeline) > 0, "Pipeline is empty"
         return self._pipeline[-1].get_type_of_target_variable()
 
-    def is_loose_information(self) -> bool:
+    def is_loses_information(self) -> bool:
         return self._loose_information
 
 __all__ = ['Pipeline']

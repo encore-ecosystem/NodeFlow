@@ -1,2 +1,5 @@
 .idea
 dist
+/target
+examples/cv_dataset_converter/toy_datasets/*
+

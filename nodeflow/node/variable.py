@@ -1,4 +1,4 @@
-from .base import Node
+from .abstract import Node
 from abc import ABCMeta, abstractmethod
 
 
