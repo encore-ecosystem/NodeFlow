@@ -7,6 +7,8 @@ from nodeflow.node.variable import Variable
 
 
 class Converter:
+    ROOT_CONVERTER: Optional['Converter'] = None
+
     def __init__(self, adapters: Optional[Iterable[Adapter]] = None, sub_converters: Optional[Iterable['Converter']] = None):
         self.graph          = {}
         self.sub_converters = set()
@@ -45,11 +47,11 @@ class Converter:
         return variable_type in self.graph
 
     def convert(self, variable: Variable, to_type: Type[Variable]) -> Optional[Variable]:
-        pipeline = self._get_converting_pipeline(source=variable.__class__, target=to_type)
+        pipeline, is_safe = self.get_converting_pipeline(source=variable.__class__, target=to_type)
         assert pipeline is not None, "Could not convert variable"
         return pipeline.compute(variable)
 
-    def _get_converting_pipeline(self, source: Type[Variable], target: Type[Variable]) -> Optional[Pipeline]:
+    def get_converting_pipeline(self, source: Type[Variable], target: Type[Variable]) -> tuple[Optional[Pipeline], bool]:
         pipeline_with_loses_information : Optional[Pipeline] = None
         # ---------
         # BFS
@@ -75,10 +77,20 @@ class Converter:
                         pipeline_with_loses_information = pipeline
                     else:
                         # the shortest pipeline without loosing an information
-                        return pipeline
+                        return pipeline, True
                 queue.append([child, type_road + [child]])
 
-        return pipeline_with_loses_information
+        return pipeline_with_loses_information, False
+
+    #
+    # Context
+    #
+    def __enter__(self):
+        Converter.ROOT_CONVERTER = self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        Converter.ROOT_CONVERTER = None
+
 
 __all__ = [
     "Converter"

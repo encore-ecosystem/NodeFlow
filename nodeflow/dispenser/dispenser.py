@@ -1,3 +1,4 @@
+from nodeflow import Converter
 from nodeflow.node import Variable, Function
 
 
@@ -14,8 +15,18 @@ class Dispenser:
 
         # Check types
         for key in self.variables_table:
-            assert issubclass(type(self.variables_table[key]), function_types[key]), \
-                f"Couldn't match key {key}: Expected subclass of {function_types[key]}, but got {type(self.variables_table[key])}"
+            # Subclass allowed
+            if issubclass(type(self.variables_table[key]), function_types[key]):
+                continue
+
+            # Try to find safe pipeline
+            assert Converter.ROOT_CONVERTER is not None, "Missing root converter, use context manager to determine it"
+            pipeline, is_safe = Converter.ROOT_CONVERTER.get_converting_pipeline(
+                source=type(self.variables_table[key]),
+                target=function_types[key],
+            )
+
+            assert is_safe, f"Couldn't match key {key}: Is there safe adapter {type(self.variables_table[key])} -> {function_types[key]}?"
 
         return other.compute(**self.variables_table)
 
