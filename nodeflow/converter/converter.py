@@ -1,8 +1,8 @@
-from nodeflow.adapters import Adapter
+from nodeflow.adapter import Adapter
 from typing import Iterable, Type, Optional
 from collections import deque
 
-from nodeflow.adapters.pipeline import Pipeline
+from nodeflow.adapter.pipeline import Pipeline
 from nodeflow.node.variable import Variable
 
 

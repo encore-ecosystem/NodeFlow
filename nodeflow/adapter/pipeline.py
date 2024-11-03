@@ -1,4 +1,4 @@
-from nodeflow.adapters.abstract import Adapter
+from nodeflow.adapter.abstract import Adapter
 from typing import Type
 from nodeflow.node.variable import Variable
 

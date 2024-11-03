@@ -1,6 +1,6 @@
 from nodeflow.converter import Converter
 from nodeflow.node import *
-from nodeflow.adapters import *
+from nodeflow.adapter import *
 from nodeflow.node.variable import Variable
 
 # =========

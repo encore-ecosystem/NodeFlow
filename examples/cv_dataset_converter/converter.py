@@ -1,48 +1,68 @@
-from examples.cv_dataset_converter.utils.adapters import *
-from examples.cv_dataset_converter.utils.functions import *
-from examples.cv_dataset_converter.utils.variables import *
+from examples.cv_dataset_converter.utils import PathVariable
+from examples.cv_dataset_converter.utils.dataset.coco.adapters.coco2yolo import COCO2YOLO_Adapter
+from utils import *
+from pathlib import Path
+from enum import Enum
 
-from nodeflow import Converter
-import pathlib
+from nodeflow import func2node, Dispenser
 
-ADAPTER_LIST = [
-    COCO2YOLO_Adapter(),
-    YOLO2COCO_Adapter(),
-]
+
+CONSOLE_LEN : int = 64
+
+
+class ConvertingPipeline(str, Enum):
+    YOLO2COCO = 'y2c'
+    COCO2YOLO = 'c2y'
 
 
 def main():
-    converter = Converter(ADAPTER_LIST)
+    while True:
+        print(f"{"[ NodeFlow example for dataset converting ]":=^{CONSOLE_LEN}}")
+        print("1) YOLO2COCO")
+        print("2) COCO2YOLO")
+        print("0) Exit")
 
-    coco_dataset = converter.convert(
-        variable=YOLO_Reader().compute(
-            path_to_dataset=PathVariable(
-                value=pathlib.Path().resolve() / 'toy_datasets' / 'YOLO'
-            )
-        ),
-        to_type=COCO_Dataset
-    )
-    COCO_Writer().compute(
-        coco_dataset=coco_dataset,
-        target_path=PathVariable(
-            value=pathlib.Path().resolve() / 'toy_datasets' / 'COCO'
-        )
-    )
+        menu = input("Choose converting pipeline: ")
+        if not menu.isnumeric():
+            print("Invalid input")
+            continue
 
-    yolo_dataset = converter.convert(
-        variable=COCO_Reader().compute(
-            path_to_dataset=PathVariable(
-                value=pathlib.Path().resolve() / 'toy_datasets' / 'COCO'
-            )
-        ),
-        to_type=YOLO_Dataset
-    )
-    YOLO_Writer().compute(
-        yolo_dataset=yolo_dataset,
-        target_path=PathVariable(
-            value=pathlib.Path().resolve() / 'toy_datasets' / 'YOLO'
-        )
-    )
+        menu = int(menu)
+        match menu:
+            case 0:
+                print("Bye!")
+                break
+            case 1:
+                print("YOLO2COCO")
+                pipeline = ConvertingPipeline.YOLO2COCO
+            case 2:
+                print("COCO2YOLO")
+                pipeline = ConvertingPipeline.COCO2YOLO
+            case _:
+                print("Invalid input")
+                continue
+
+        input_folder = Path(input("Enter Input folder: ")).resolve()
+        assert input_folder.exists(), "Input folder does not exist"
+
+        output_folder = Path(input("Enter Output folder: ")).resolve()
+        assert output_folder.exists(), "Output folder does not exist"
+
+        match pipeline:
+            case ConvertingPipeline.YOLO2COCO:
+                Dispenser({
+                    'yolo_dataset': PathVariable(input_folder) >> func2node(coco_reader) >> COCO2YOLO_Adapter(),
+                    'target_path' : PathVariable(output_folder)
+                }) >> func2node(yolo_writer)
+
+            case ConvertingPipeline.COCO2YOLO:
+                Dispenser({
+                    'yolo_dataset': PathVariable(input_folder) >> func2node(yolo_reader) >> YOLO2COCO_Adapter(),
+                    'target_path': PathVariable(output_folder)
+                }) >> func2node(coco_writer)
+
+            case _:
+                print("Something went wrong... Maybe you don't add new converting pipeline")
 
 
 if __name__ == '__main__':
