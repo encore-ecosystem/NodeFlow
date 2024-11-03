@@ -1,5 +1,5 @@
-from examples.cv_dataset_converter.utils.shared import PathVariable, Result
-from examples.cv_dataset_converter.utils import COCO_Dataset
+from examples.cv_dataset_converter.utils.coco_dataset import COCO_Dataset
+from nodeflow.builtin import PathVariable, Result
 
 import shutil
 import json

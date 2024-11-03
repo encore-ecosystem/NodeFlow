@@ -1,5 +1,5 @@
 from nodeflow import Variable
-from examples.cv_dataset_converter.utils.shared import PathVariable
+from nodeflow.builtin.variables import PathVariable
 from typing import Optional
 
 

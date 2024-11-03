@@ -1,5 +1,5 @@
-from examples.cv_dataset_converter.utils.shared import PathVariable, Result
-from examples.cv_dataset_converter.utils import YOLO_Dataset
+from examples.cv_dataset_converter.utils.yolo_dataset import YOLO_Dataset
+from nodeflow.builtin import PathVariable, Result
 
 import shutil
 import yaml
@@ -20,7 +20,7 @@ def yolo_writer(yolo_dataset: YOLO_Dataset, target_path: PathVariable) -> Result
             )
 
             with open(root / split / 'labels' / f"{image_path.stem}.txt", 'w') as label_file:
-                label_file.write(yolo_dataset.anns[split][image_path.name])
+                label_file.write(yolo_dataset.anns[split][image_path.stem])
 
     with open(root / 'data.yaml', "w") as yaml_file:
         data_yaml = {

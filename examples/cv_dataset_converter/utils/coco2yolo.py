@@ -1,4 +1,5 @@
-from examples.cv_dataset_converter.utils import YOLO_Dataset, COCO_Dataset
+from examples.cv_dataset_converter.utils.yolo_dataset import YOLO_Dataset
+from examples.cv_dataset_converter.utils.coco_dataset import COCO_Dataset
 from nodeflow import Adapter
 from tqdm import tqdm
 
@@ -6,7 +7,7 @@ import yaml
 
 
 class COCO2YOLO_Adapter(Adapter):
-    def convert(self, variable: COCO_Dataset) -> YOLO_Dataset:
+    def compute(self, variable: COCO_Dataset) -> YOLO_Dataset:
         # Output path
         output_base_directory = variable.value.value.parent / "results" / "COCO"
 

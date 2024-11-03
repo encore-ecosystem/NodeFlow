@@ -1,6 +1,8 @@
-from examples.cv_dataset_converter.utils.shared import PathVariable
-from examples.cv_dataset_converter.utils import YOLO_Dataset
+from examples.cv_dataset_converter.utils.yolo_dataset import YOLO_Dataset
+from nodeflow.builtin import PathVariable
+
 import yaml
+
 
 
 def yolo_reader(path_to_dataset: PathVariable) -> YOLO_Dataset:

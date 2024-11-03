@@ -1,5 +1,8 @@
-from examples.cv_dataset_converter.utils import YOLO_Dataset, COCO_Dataset
+from examples.cv_dataset_converter.utils.coco_dataset import COCO_Dataset
+from examples.cv_dataset_converter.utils.yolo_dataset import YOLO_Dataset
+
 from shapely.geometry.polygon import Polygon
+
 from nodeflow import Adapter
 from PIL import Image
 from tqdm import tqdm
@@ -8,7 +11,7 @@ import numpy as np
 
 
 class YOLO2COCO_Adapter(Adapter):
-    def convert(self, variable: YOLO_Dataset) -> COCO_Dataset:
+    def compute(self, variable: YOLO_Dataset) -> COCO_Dataset:
         assert isinstance(variable, YOLO_Dataset)
 
         cat_id_to_name_mapping = [
@@ -75,7 +78,7 @@ class YOLO2COCO_Adapter(Adapter):
 
                 image_id += 1
 
-        return COCO_Dataset(anns=coco_anns, imgs=variable.images, path=None)
+        return COCO_Dataset(anns=coco_anns, images=variable.images, path=None)
 
     def is_loses_information(self) -> bool:
         return True
