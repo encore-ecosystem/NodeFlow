@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 12
+names: ['-', '2', '4', '5', '6', '7', '8', '9', 'div', 'eqial', 'mult', 'plus']
+
+roboflow:
+  workspace: mnist-bvalq
+  project: coco-ki11n
+  version: 5
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/mnist-bvalq/coco-ki11n/dataset/5
