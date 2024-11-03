@@ -16,10 +16,10 @@ class Pipeline(Adapter):
             s2 = self._pipeline[-1].get_type_of_source_variable()
             assert s1 == s2, 'Adapter is invalid for current pipeline'
 
-    def convert(self, variable: Variable):
+    def compute(self, variable: Variable):
         assert len(self._pipeline) > 0, "Pipeline is empty"
         for adapter in self._pipeline:
-            variable = adapter.convert(variable)
+            variable = adapter.compute(variable)
         return variable
 
     def get_type_of_source_variable(self) -> Type[Variable]:

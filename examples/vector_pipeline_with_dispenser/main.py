@@ -1,33 +1,12 @@
-from nodeflow.node import Variable
 from nodeflow.converter import func2node
 from nodeflow.dispenser import Dispenser
+from nodeflow.builtin import Float
+
+from vector_variable import *
 
 
-class Vector3(Variable):
-    def __init__(self, value: list[float]):
-        super().__init__(value)
-
-    def __mul__(self, other: 'Vector3') -> 'Vector3':
-        return Vector3(
-            value = [a_i*b_i for a_i, b_i in zip(self.value, other.value)]
-        )
-
-    def __len__(self) -> int:
-        return len(self.value)
-
-    def __getitem__(self, i) -> float:
-        return self.value[i]
-
-    def __iter__(self):
-        return self.value.__iter__()
-
-class Float(Variable):
-    def __init__(self, value: float):
-        super().__init__(value)
-
-
-def scalar_product(a: Vector3, b: Vector3) -> Float:
-    return Float(value = sum(a*b))
+def scalar_product(first_vector: Vector3, second_vector: Vector3) -> Float:
+    return Float(value = sum(first_vector*second_vector))
 
 def normalize(a: Vector3) -> Vector3:
     import math
@@ -37,17 +16,16 @@ def normalize(a: Vector3) -> Vector3:
     )
 
 def main():
-    a = Vector3([1, 1, 1])
-    b = Vector3([2, 2, 2])
+    a = Vector3([1, 2, 3])
+    b = Vector3([3, 2, 1])
 
-    scalar_product_node = func2node(scalar_product)
-    normalize_node      = func2node(normalize)
+    result = Dispenser(
+        first_vector  = a >> func2node(normalize),
+        second_vector = b >> func2node(normalize),
+    ) >> func2node(scalar_product)
 
-    res = Dispenser(
-        normalize_node.compute(a),
-        normalize_node.compute(b),
-    ) >> scalar_product_node
-    print(res.value)
+
+    print(result.value)
 
 
 if __name__ == "__main__":

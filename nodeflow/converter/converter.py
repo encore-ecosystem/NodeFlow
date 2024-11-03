@@ -7,11 +7,17 @@ from nodeflow.node.variable import Variable
 
 
 class Converter:
-    def __init__(self, adapters: Iterable[Adapter]):
-        self.graph = {}
-        self.add_adapters(adapters)
+    def __init__(self, adapters: Optional[Iterable[Adapter]] = None, sub_converters: Optional[Iterable['Converter']] = None):
+        self.graph          = {}
+        self.sub_converters = set()
 
-    def add_adapter(self, adapter: Adapter):
+        (adapters is not None) and self.register_adapters(adapters)
+        (sub_converters is not None) and self.register_converters(sub_converters)
+
+    #
+    # Adapters handlers
+    #
+    def register_adapter(self, adapter: Adapter):
         # Resolve source type
         source_type = adapter.get_type_of_source_variable().__name__
         if source_type not in self.graph:
@@ -21,9 +27,19 @@ class Converter:
         target_type = adapter.get_type_of_target_variable().__name__
         self.graph[source_type][target_type] = adapter
 
-    def add_adapters(self, adapters: Iterable[Adapter]):
+    def register_adapters(self, adapters: Iterable[Adapter]):
         for adapter in adapters:
-            self.add_adapter(adapter)
+            self.register_adapter(adapter)
+
+    #
+    # Converters handlers
+    #
+    def register_converter(self, converter: 'Converter'):
+        self.sub_converters.add(converter)
+
+    def register_converters(self, converters: Iterable['Converter']):
+        for converter in converters:
+            self.register_converter(converter)
 
     def is_support_variable(self, variable_type: Type[Variable]) -> bool:
         return variable_type in self.graph
@@ -31,7 +47,7 @@ class Converter:
     def convert(self, variable: Variable, to_type: Type[Variable]) -> Optional[Variable]:
         pipeline = self._get_converting_pipeline(source=variable.__class__, target=to_type)
         assert pipeline is not None, "Could not convert variable"
-        return pipeline.convert(variable)
+        return pipeline.compute(variable)
 
     def _get_converting_pipeline(self, source: Type[Variable], target: Type[Variable]) -> Optional[Pipeline]:
         pipeline_with_loses_information : Optional[Pipeline] = None

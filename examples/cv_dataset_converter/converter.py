@@ -1,4 +1,8 @@
-from examples.cv_dataset_converter.utils import PathVariable
+# The datasets in directory ./input_datasets were obtained from the:
+# https://universe.roboflow.com/mnist-bvalq/coco-ki11n
+# by user: MNIST
+# Please, read README files in datasets directory
+
 from examples.cv_dataset_converter.utils.dataset.coco.adapters.coco2yolo import COCO2YOLO_Adapter
 from utils import *
 from pathlib import Path
