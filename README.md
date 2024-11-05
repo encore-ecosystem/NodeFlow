@@ -1,5 +1,3 @@
-from nodeflow.builtin import Integer
-
 # Nodeflow
 <div align="center">
     <img src="img/logo.png"  alt="Warp" />
@@ -23,13 +21,13 @@ Nodeflow if a framework to make pipelines from nodes.
 
 # Usage
 <div align="center">
-    <img src="img/code_example.svg"  alt="Warp" />
+    <img src="https://github.com/encore-ecosystem/NodeFlow/blob/main/img/code_example.svg?raw=trueimg/" alt="Warp" />
 </div>
 
 # Installing
 Requires python version **3.10 or later**
 ```bash
-pip install nodeflow
+pip3 install nodeflow
 ```
 Import it to your code using:
 ```python
