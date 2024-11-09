@@ -1,2 +1,2 @@
 .idea
-examples/cv_dataset_converter/output_converter
+__pycache__/
