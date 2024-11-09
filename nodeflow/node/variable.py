@@ -9,6 +9,9 @@ class Variable(Node, metaclass=ABCMeta):
     def __rshift__(self, other: 'Function') -> 'Variable':
         return other.compute(self)
 
+    def __eq__(self, other: 'Variable') -> bool:
+        return self.value == other.value
+
 
 # The import leaves here for resolving circular import. Also see (1) above line 8
 from nodeflow.node.function import Function
