@@ -1,12 +1,14 @@
-from nodeflow import Converter
+from nodeflow import Converter, func2node
 from nodeflow.node import Variable, Function
+from typing import Callable, Union
 
 
 class Dispenser:
-    def __init__(self, **kwargs: Variable):
+    def __init__(self, **kwargs: object):
         self.variables_table = kwargs
 
-    def __rshift__(self, other: Function):
+    def __rshift__(self, other: Union[Function|Callable]):
+        other = func2node(other) if isinstance(other, Callable) else other
         function_types = other.get_parameters()
 
         # Check for ability to match

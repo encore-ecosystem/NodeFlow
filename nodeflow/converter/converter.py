@@ -51,7 +51,7 @@ class Converter:
         assert pipeline is not None, "Could not convert variable"
         return pipeline.compute(variable)
 
-    def get_converting_pipeline(self, source: Type[Variable], target: Type[Variable]) -> tuple[Optional[Pipeline], bool]:
+    def get_converting_pipeline(self, source: Type, target: Type) -> tuple[Optional[Pipeline], bool]:
         pipeline_with_loses_information : Optional[Pipeline] = None
         # ---------
         # BFS
