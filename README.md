@@ -37,10 +37,11 @@ import nodeflow
 # Types
 In `Nodeflow`, everything is a subclass of the `Node` class. 
 
+**Dev note: This is an old documentation. Newest versions of Nodeflow contain adapters from any2any types.**
 
 ## Variable
 Each node encapsulates information for a specific type and functions as a container.
-The code snippet below is taken from the built-in types: 
+The code snippet below is taken from the built-in types:
 ```python
 from nodeflow import Variable
 
