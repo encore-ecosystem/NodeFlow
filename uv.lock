@@ -1,0 +1,8 @@
+version = 1
+revision = 1
+requires-python = ">=3.12"
+
+[[package]]
+name = "nodeflow"
+version = "0.2.0"
+source = { editable = "." }
