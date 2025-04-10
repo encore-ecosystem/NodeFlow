@@ -4,6 +4,15 @@ from collections import deque
 from nodeflow.pipeline import Pipeline
 
 
+class AsIsAdapter(Adapter):
+
+    def compute(self, variable: object) -> object:
+        return variable
+
+    def is_loses_information(self) -> bool:
+        return False
+
+
 class Converter:
     ROOT_CONVERTER: Optional['Converter'] = None
 
@@ -51,7 +60,7 @@ class Converter:
 
     def get_converting_pipeline(self, source: Type, target: Type) -> tuple[Optional[Pipeline], bool]:
         if source == target:
-            return self.graph[source.__name__], True
+            return Pipeline().add_adapter(AsIsAdapter()), True
 
         pipeline_with_loses_information : Optional[Pipeline] = None
         # ---------
