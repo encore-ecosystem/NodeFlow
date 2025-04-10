@@ -51,7 +51,7 @@ class Converter:
 
     def get_converting_pipeline(self, source: Type, target: Type) -> tuple[Optional[Pipeline], bool]:
         if source == target:
-            return self.graph[source.__name__]
+            return self.graph[source.__name__], True
 
         pipeline_with_loses_information : Optional[Pipeline] = None
         # ---------
