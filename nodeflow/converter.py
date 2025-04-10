@@ -60,7 +60,9 @@ class Converter:
 
     def get_converting_pipeline(self, source: Type, target: Type) -> tuple[Optional[Pipeline], bool]:
         if source == target:
-            return Pipeline().add_adapter(AsIsAdapter()), True
+            pipeline = Pipeline()
+            pipeline.add_adapter(AsIsAdapter())
+            return pipeline, True
 
         pipeline_with_loses_information : Optional[Pipeline] = None
         # ---------
